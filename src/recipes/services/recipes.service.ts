@@ -1,30 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { CreateRecipeInput } from '../dto/create-recipe.input';
 import { Recipe } from '../models/recipe.model';
+import { RecipeRepository } from '../repositories/recipe.repository';
 
 @Injectable()
 export class RecipesService {
-  private readonly recipes: Recipe[] = [
-    { id: 1, title: 'Tacos' },
-    { id: 2, title: 'Burritos' },
-  ];
+  constructor(private readonly recipesRepository: RecipeRepository) {}
 
-  async createOne(createRecipeInput: CreateRecipeInput): Promise<Recipe> {
-    return await new Promise((resolve) => {
-      const recipe = { id: this.recipes.length + 1, ...createRecipeInput };
-      this.recipes.push(recipe);
-      resolve(recipe);
-    });
+  async createOne(createRecipeInput: CreateRecipeInput) {
+    const recipe = await this.recipesRepository.save({ ...createRecipeInput });
+    return recipe;
   }
 
-  async getMany(): Promise<Recipe[]> {
-    return await new Promise((resolve) => resolve(this.recipes));
+  async getMany() {
+    return await this.recipesRepository.find();
   }
 
-  async getOne(id: number): Promise<Recipe> {
-    return await new Promise((resolve) => {
-      const recipe = this.recipes.find((recipe) => recipe.id === id);
-      resolve(recipe);
-    });
+  async getOne(id: number) {
+    return await this.recipesRepository.findOne({ where: { id } });
   }
 }

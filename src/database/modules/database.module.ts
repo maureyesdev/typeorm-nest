@@ -21,6 +21,7 @@ import { EntitiesModule } from './entities.module';
           type: 'postgres',
           ...config,
           synchronize: true,
+          logging: true,
         } as PostgresConnectionOptions;
       },
     }),
