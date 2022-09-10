@@ -3,6 +3,8 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { RecipesService } from './services/recipes.service';
 import { RecipesResolver } from './resolvers/recipes.resolver';
+import { EntitiesModule } from '../database/modules/entities.module';
+import { RecipeRepository } from './repositories/recipe.repository';
 
 @Module({
   imports: [
@@ -11,6 +13,7 @@ import { RecipesResolver } from './resolvers/recipes.resolver';
       autoSchemaFile: true,
       path: '/recipes/gql',
     }),
+    EntitiesModule.forRepositories([RecipeRepository]),
   ],
   providers: [RecipesResolver, RecipesService],
 })
