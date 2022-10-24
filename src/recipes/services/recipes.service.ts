@@ -8,7 +8,9 @@ export class RecipesService {
   constructor(private readonly recipesRepository: RecipeRepository) {}
 
   async createOne(createRecipeInput: CreateRecipeInput) {
-    const recipe = await this.recipesRepository.save({ ...createRecipeInput });
+    const recipeEntity = this.recipesRepository.create({ ...createRecipeInput })
+    console.log('🚀 ~ recipeEntity', recipeEntity);
+    const recipe = await this.recipesRepository.save(recipeEntity);
     return recipe;
   }
 
